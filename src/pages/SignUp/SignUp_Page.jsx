@@ -37,43 +37,59 @@ const SignUp = () => {
   const [verificationError, setverificationError] = useState(""); //인증 오류
   const [sendVerification, setsendVerification] = useState(false); //인증 발송 상태
 
+  const [majorList, setMajorList] = useState([]); // 학과 데이터 리스트
+
   const [submitEnalbed, setSubmitEnabled] = useState(false); //회원가입 버튼 활성화 상태
 
   // 웹메일 인증 버튼 클릭 이벤트 핸들러
   const sendVerificationMail = () => {
-    console.log(UserInfo.mail);
-    setsendVerification(true);
-    // axios({
-    //   method: "post",
-    //   url: "/api/sendVerification",
-    //   data: { mail: UserInfo.mail },
-    //   headers: {
-    //     Authorization: "AccessToken",
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log("메일 전송 완료", response);
-    //     setsendVerification(true);
-    //   })
-    //   .catch((error) => {
-    //     console.log("메일 전송 실패", error);
-    //     setsendVerification(false);
-    //   });
+    // console.log(UserInfo.mail);
+    // setsendVerification(true);
+    axios({
+      method: "post",
+      url: "/api/sendVerificationMail",
+      data: { mail: UserInfo.mail },
+    })
+      .then((response) => {
+        console.log("메일 전송 완료", response);
+        setsendVerification(true);
+      })
+      .catch((error) => {
+        console.log("메일 전송 실패", error);
+        setsendVerification(false);
+      });
   };
 
   // 인증 번호 확인
   const codeCheck = () => {
-    const server = "1234"; //여기 수정해야됨. 서버에서 전송한 인증번호 받아와야됨.
-    // 서버에서 전송한 인증번호와 사용자가 입력한 인증번호가 동일한지 검사
-    if (UserInfo.code === server) {
-      setverificationError("인증이 완료되었습니다.");
-      setsubRequire((prev) => ({ ...prev, code: true }));
-      return true;
-    } else {
-      setverificationError("인증 번호가 일치하지 않습니다.");
-      setsubRequire((prev) => ({ ...prev, code: false }));
-      return false;
-    }
+    axios({
+      method: "post",
+      url: "/api/checkVerificationCode",
+      data: { mail: UserInfo.mail, code: UserInfo.code },
+    })
+      .then((response) => {
+        console.log("인증 완료", response);
+        setverificationError("인증이 완료되었습니다.");
+        setsubRequire((prev) => ({ ...prev, code: true }));
+        return true;
+      })
+      .catch((error) => {
+        console.log("인증 실패", error);
+        setverificationError("인증 번호가 일치하지 않습니다.");
+        setsubRequire((prev) => ({ ...prev, code: false }));
+        return false;
+      });
+    // const server = "1234"; //여기 수정해야됨. 서버에서 전송한 인증번호 받아와야됨.
+    // // 서버에서 전송한 인증번호와 사용자가 입력한 인증번호가 동일한지 검사
+    // if (UserInfo.code === server) {
+    //   setverificationError("인증이 완료되었습니다.");
+    //   setsubRequire((prev) => ({ ...prev, code: true }));
+    //   return true;
+    // } else {
+    //   setverificationError("인증 번호가 일치하지 않습니다.");
+    //   setsubRequire((prev) => ({ ...prev, code: false }));
+    //   return false;
+    // }
   };
 
   // 웹메일 유효성 검사
@@ -168,27 +184,55 @@ const SignUp = () => {
       }));
     }
 
-    if (UserInfo.name && UserInfo.name.value !== "") {
+    if (UserInfo.name.trim() !== "") {
       setsubRequire((prev) => ({
         ...prev,
         name: true,
       }));
+    } else {
+      setsubRequire((prev) => ({
+        ...prev,
+        name: false,
+      }));
     }
 
-    if (UserInfo.major && UserInfo.major.value !== "") {
+    if (UserInfo.major !== "") {
       setsubRequire((prev) => ({
         ...prev,
         major: true,
       }));
+    } else {
+      setsubRequire((prev) => ({
+        ...prev,
+        major: false,
+      }));
     }
 
-    if (UserInfo.grade && UserInfo.grade.value !== "") {
+    if (UserInfo.grade !== "") {
       setsubRequire((prev) => ({
         ...prev,
         grade: true,
       }));
+    } else {
+      setsubRequire((prev) => ({
+        ...prev,
+        grade: false,
+      }));
     }
   }, [UserInfo]);
+
+  // 컴포넌트가 마운트될 때 학과 데이터 리스트 호출
+  useEffect(() => {
+    axios
+      .get("/api/majorData")
+      .then((response) => {
+        console.log(response.data);
+        setMajorList(response.data); //TODO: 여기 왜 majors인지 확인 필요
+      })
+      .catch((error) => {
+        console.error("데이터 불러오기 실패", error);
+      });
+  }, []);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -200,8 +244,28 @@ const SignUp = () => {
   };
 
   const submit = () => {
-    //모든 필드가 채워져 있지 않으면 채워지지 않은 필드로 커서
-    console.log(subRequire);
+    axios({
+      method: "post",
+      url: "/api/registerUserInfo",
+      data: {
+        mail: subRequire.mail,
+        code: subRequire.code,
+        passwd: subRequire.passwd,
+        passwdCheck: subRequire.passwdCheck,
+        name: subRequire.name,
+        id: subRequire.id,
+        major: subRequire.major,
+        grade: subRequire.grade,
+        tel: subRequire.tel,
+      },
+    })
+      .then((response) => {
+        console.log("회원가입 완료", response);
+      })
+      .catch((error) => {
+        console.log("회원가입 실패", error);
+      });
+    // console.log(subRequire);
   };
 
   return (
@@ -304,8 +368,11 @@ const SignUp = () => {
         <div>
           <select name="major" onChange={onChange} value={UserInfo.major}>
             <option value="">학과</option>
-            <option>컴퓨터공학부</option>
-            <option>전자공학부</option>
+            {majorList.map((major, index) => (
+              <option key={index} value={major}>
+                {major}
+              </option>
+            ))}
           </select>
         </div>
         <div>
