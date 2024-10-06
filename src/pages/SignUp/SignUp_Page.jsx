@@ -1,7 +1,7 @@
 import "./SignUp_Page.css";
 import UserInput from "../../components/UserInput/UserInput";
 import { useState, useEffect } from "react";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 const SignUp = () => {
   const [UserInfo, setUserInfo] = useState({
@@ -47,7 +47,7 @@ const SignUp = () => {
     // setsendVerification(true);
     axios({
       method: "post",
-      url: "/api/sendVerificationMail",
+      url: "https://ed200653-686d-4e31-a2bd-d36ed76ee3e6.mock.pstmn.io/mailsucess",
       data: { mail: UserInfo.mail },
     })
       .then((response) => {
@@ -64,7 +64,7 @@ const SignUp = () => {
   const codeCheck = () => {
     axios({
       method: "post",
-      url: "/api/checkVerificationCode",
+      url: "https://ed200653-686d-4e31-a2bd-d36ed76ee3e6.mock.pstmn.io//verification_sucess",
       data: { mail: UserInfo.mail, code: UserInfo.code },
     })
       .then((response) => {
@@ -224,7 +224,9 @@ const SignUp = () => {
   // 컴포넌트가 마운트될 때 학과 데이터 리스트 호출
   useEffect(() => {
     axios
-      .get("/api/majorData")
+      .get(
+        "https://ed200653-686d-4e31-a2bd-d36ed76ee3e6.mock.pstmn.io/majorList"
+      )
       .then((response) => {
         console.log(response.data);
         setMajorList(response.data); //TODO: 여기 왜 majors인지 확인 필요
@@ -243,7 +245,9 @@ const SignUp = () => {
     });
   };
 
-  const submit = () => {
+  const submit = (e) => {
+    e.preventDefault();
+
     axios({
       method: "post",
       url: "/api/registerUserInfo",
@@ -264,6 +268,7 @@ const SignUp = () => {
       })
       .catch((error) => {
         console.log("회원가입 실패", error);
+        console.log(subRequire);
       });
     // console.log(subRequire);
   };
@@ -274,133 +279,138 @@ const SignUp = () => {
         <div>
           <h1>회원가입</h1>
         </div>
-        <div>
-          <UserInput
-            type="text"
-            placeholder="금오공대 웹메일"
-            value={UserInfo.mail}
-            name="mail"
-            onChange={onChange}
-          />
-          <button
-            onClick={sendVerificationMail}
-            disabled={mailError || UserInfo.mail === ""}
-          >
-            인증
-          </button>
-        </div>
-        {mailError && (
+        <form onSubmit={submit}>
           <div>
-            <small>{mailError}</small>
+            <UserInput
+              type="text"
+              placeholder="금오공대 웹메일"
+              value={UserInfo.mail}
+              name="mail"
+              onChange={onChange}
+            />
+            <button
+              type="button"
+              onClick={sendVerificationMail}
+              disabled={mailError || UserInfo.mail === ""}
+            >
+              인증
+            </button>
           </div>
-        )}
-        {sendVerification && (
+          {mailError && (
+            <div>
+              <small>{mailError}</small>
+            </div>
+          )}
+          {sendVerification && (
+            <div>
+              <div>
+                <UserInput
+                  type="text"
+                  placeholder="인증번호"
+                  value={UserInfo.code}
+                  name="code"
+                  onChange={onChange}
+                />
+                <button type="button" onClick={codeCheck}>
+                  확인
+                </button>
+              </div>
+              <div>
+                <small>{verificationError}</small>
+              </div>
+            </div>
+          )}
           <div>
-            <div>
-              <UserInput
-                type="text"
-                placeholder="인증번호"
-                value={UserInfo.code}
-                name="code"
-                onChange={onChange}
-              />
-              <button onClick={codeCheck}>확인</button>
-            </div>
-            <div>
-              <small>{verificationError}</small>
-            </div>
+            <UserInput
+              type="password"
+              placeholder="비밀번호"
+              value={UserInfo.passwd}
+              name="passwd"
+              onChange={onChange}
+              maxLength={20}
+            />
+            {passwdError && (
+              <div>
+                <small>{passwdError}</small>
+              </div>
+            )}
           </div>
-        )}
-        <div>
-          <UserInput
-            type="password"
-            placeholder="비밀번호"
-            value={UserInfo.passwd}
-            name="passwd"
-            onChange={onChange}
-            maxLength={20}
-          />
-          {passwdError && (
-            <div>
-              <small>{passwdError}</small>
-            </div>
-          )}
-        </div>
-        <div>
-          <UserInput
-            type="password"
-            placeholder="비밀번호 확인"
-            value={UserInfo.passwdCheck}
-            name="passwdCheck"
-            onChange={onChange}
-          />
-          {passwdCheckError && (
-            <div>
-              <small>{passwdCheckError}</small>
-            </div>
-          )}
-        </div>
-        <div>-</div>
-        <div>
-          <UserInput
-            type="text"
-            placeholder="이름"
-            value={UserInfo.name}
-            name="name"
-            onChange={onChange}
-          />
-        </div>
-        <div>
-          <UserInput
-            type="text"
-            placeholder="학번"
-            value={UserInfo.id}
-            name="id"
-            onChange={onChange}
-            maxLength={8}
-          />
-          {idError && (
-            <div>
-              <small>{idError}</small>
-            </div>
-          )}
-        </div>
-        <div>
-          <select name="major" onChange={onChange} value={UserInfo.major}>
-            <option value="">학과</option>
-            {majorList.map((major, index) => (
-              <option key={index} value={major}>
-                {major}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <select name="grade" onChange={onChange} value={UserInfo.grade}>
-            <option value="">학년</option>
-            <option value="1">1학년</option>
-            <option value="2">2학년</option>
-            <option value="3">3학년</option>
-            <option value="4">4학년</option>
-          </select>
-        </div>
-        <div>
-          <UserInput
-            type="text"
-            placeholder="전화번호"
-            value={UserInfo.tel}
-            name="tel"
-            onChange={onChange}
-          />
-          {telError && (
-            <div>
-              <small>{telError}</small>
-            </div>
-          )}
-        </div>
-        <div>
-          <button onClick={submit}>회원가입</button>
-        </div>
+          <div>
+            <UserInput
+              type="password"
+              placeholder="비밀번호 확인"
+              value={UserInfo.passwdCheck}
+              name="passwdCheck"
+              onChange={onChange}
+            />
+            {passwdCheckError && (
+              <div>
+                <small>{passwdCheckError}</small>
+              </div>
+            )}
+          </div>
+          <div>-</div>
+          <div>
+            <UserInput
+              type="text"
+              placeholder="이름"
+              value={UserInfo.name}
+              name="name"
+              onChange={onChange}
+            />
+          </div>
+          <div>
+            <UserInput
+              type="text"
+              placeholder="학번"
+              value={UserInfo.id}
+              name="id"
+              onChange={onChange}
+              maxLength={8}
+            />
+            {idError && (
+              <div>
+                <small>{idError}</small>
+              </div>
+            )}
+          </div>
+          <div>
+            <select name="major" onChange={onChange} value={UserInfo.major}>
+              <option value="">학과</option>
+              {majorList.map((major, index) => (
+                <option key={index} value={major}>
+                  {major}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <select name="grade" onChange={onChange} value={UserInfo.grade}>
+              <option value="">학년</option>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+              <option value="4">4학년</option>
+            </select>
+          </div>
+          <div>
+            <UserInput
+              type="text"
+              placeholder="전화번호"
+              value={UserInfo.tel}
+              name="tel"
+              onChange={onChange}
+            />
+            {telError && (
+              <div>
+                <small>{telError}</small>
+              </div>
+            )}
+          </div>
+          <div>
+            <button type="submit">회원가입</button>
+          </div>
+        </form>
       </div>
     </div>
   );
