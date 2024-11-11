@@ -1,4 +1,4 @@
-import "./Login_Page.css";
+import style from "./Login_Page.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -50,9 +50,9 @@ const Login = () => {
   };
 
   return (
-    <div className="parent">
-      <div className="outline">
-        <div className="title">
+    <div className={style.parent}>
+      <div className={style.outline}>
+        <div className={style.title}>
           <h1>로그인</h1>
         </div>
         <form onSubmit={handleSubmit}>

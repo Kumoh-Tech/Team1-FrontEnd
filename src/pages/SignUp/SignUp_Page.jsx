@@ -1,4 +1,4 @@
-import "./SignUp_Page.css";
+import style from "./SignUp_Page.module.css";
 import UserInput from "../../components/UserInput/UserInput";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -229,7 +229,7 @@ const SignUp = () => {
       )
       .then((response) => {
         console.log(response.data);
-        setMajorList(response.data); //TODO: 여기 왜 majors인지 확인 필요
+        setMajorList(response.data);
       })
       .catch((error) => {
         console.error("데이터 불러오기 실패", error);
@@ -274,8 +274,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="parent">
-      <div className="outline">
+    <div className={style.parent}>
+      <div className={style.outline}>
         <div>
           <h1>회원가입</h1>
         </div>
@@ -349,7 +349,7 @@ const SignUp = () => {
               </div>
             )}
           </div>
-          <div>-</div>
+          <hr />
           <div>
             <UserInput
               type="text"

@@ -1,0 +1,23 @@
+.header {
+  /* Frame 324 */
+
+  position: fixed;
+  width: 1443px;
+  height: 311px;
+  left: 0px;
+  top: 0px;
+
+  background: #d2e7f8;
+}
+
+.footer {
+  /* footer */
+
+  position: fixed;
+  width: 1440px;
+  height: 211px;
+  left: 0px;
+  top: 1317px;
+
+  background: #f2f2f2;
+}

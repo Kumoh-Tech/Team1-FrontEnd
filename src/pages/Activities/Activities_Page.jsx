@@ -1,5 +1,11 @@
+import Layout from "../../components/UserInput/Layout";
+
 const Activities = () => {
-  return <div>활동 페이지</div>;
+  return (
+    <Layout title={"활동"}>
+      <div>내용입니다.</div>
+    </Layout>
+  );
 };
 
 export default Activities;

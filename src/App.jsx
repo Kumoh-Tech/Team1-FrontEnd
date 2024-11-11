@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Main from "./pages/Main/Main_Page";
-import Login from "./pages/Login/Login_Page";
+import Login from "./pages/Login/Login_Page.jsx";
 import SignUp from "./pages/SignUp/SignUp_Page";
 import Announcements from "./pages/Announcements/Announcements_Page";
 import ResourceSharing from "./pages/ResourceSharing/ResourceSharing_Page";

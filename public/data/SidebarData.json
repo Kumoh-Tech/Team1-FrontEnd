@@ -1,0 +1,28 @@
+[
+  {
+    "menuId": 1,
+    "menuName": "공지사항",
+    "menuPath": "",
+    "pmenuId": ""
+  },
+  {
+    "index": 2,
+    "name": "활동"
+  },
+  {
+    "index": 3,
+    "name": "자료공유"
+  },
+  {
+    "index": 4,
+    "name": "자유게시판"
+  },
+  {
+    "index": 5,
+    "name": "게시글 작성"
+  },
+  {
+    "index": 6,
+    "name": "마이페이지"
+  }
+]

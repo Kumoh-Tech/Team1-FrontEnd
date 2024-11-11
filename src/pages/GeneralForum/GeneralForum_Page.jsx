@@ -1,5 +1,11 @@
+import Layout from "../../components/UserInput/Layout";
+
 const GeneralForum = () => {
-  return <div> 자유 게시판 페이지</div>;
+  return (
+    <Layout title={"자유게시판"}>
+      <div>내용입니다.</div>
+    </Layout>
+  );
 };
 
 export default GeneralForum;

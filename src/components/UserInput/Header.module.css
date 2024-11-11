@@ -1,0 +1,47 @@
+/* 기본 마진 제거 */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* 전체 화면 높이를 기준으로 설정 */
+}
+
+/* 고정 헤더 */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 311px;
+  background: #d2e7f8;
+  display: flex;
+  flex-direction: column; /* 세로로 쌓이도록 설정 */
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 수직 중앙 정렬 */
+  box-sizing: border-box; /* 패딩 포함하여 전체 크기 조절 */
+}
+
+/* 제목 스타일 */
+.title {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 74px;
+  line-height: 95px;
+  text-align: center;
+  letter-spacing: 0.03em;
+  color: #1f98ff;
+  margin: 0; /* 여백 제거 */
+}
+
+/* 로고 스타일 */
+.logo {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-top: 10px; /* 제목과의 간격 */
+}
