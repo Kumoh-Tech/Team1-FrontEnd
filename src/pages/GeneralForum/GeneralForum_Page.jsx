@@ -1,4 +1,4 @@
-import Layout from "../../components/UserInput/Layout";
+import Layout from "../../components/Layout/CardLayout";
 
 const GeneralForum = () => {
   return (
